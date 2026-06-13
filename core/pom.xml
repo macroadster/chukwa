@@ -862,13 +862,7 @@
                 </configuration>
             </plugin>
         </plugins>
-        <extensions>
-          <extension>
-            <groupId>org.apache.maven.wagon</groupId>
-            <artifactId>wagon-ssh-external</artifactId>
-            <version>1.0</version>
-          </extension>
-        </extensions>
+
         <pluginManagement>
           <plugins>
             <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
@@ -1378,17 +1372,6 @@
       </plugins>
     </reporting>
 
-    <distributionManagement>
-      <site>
-        <id>apache-website</id>
-        <name>Apache Website</name>
-        <url>scp://people.apache.org/www/chukwa.apache.org/content/docs/r${project.version}</url>
-      </site>
-      <repository>
-        <id>apache-repository</id>
-        <url>scpexe://people.apache.org//www/www.apache.org/dist/chukwa</url>
-      </repository>
-    </distributionManagement>
 
 </project>
 

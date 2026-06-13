@@ -660,17 +660,6 @@
       </plugins>
     </reporting>
 
-    <distributionManagement>
-      <site>
-        <id>apache-website</id>
-        <name>Apache Website</name>
-        <url>scp://people.apache.org/www/chukwa.apache.org/content/docs/r${project.version}</url>
-      </site>
-      <repository>
-        <id>apache-repository</id>
-        <url>scpexe://people.apache.org//www/www.apache.org/dist/chukwa</url>
-      </repository>
-    </distributionManagement>
 
 </project>
 
