@@ -17,44 +17,6 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <properties>
-        <buildtype>test</buildtype>
-        <BUILD_NUMBER>${env.BUILD_NUMBER}</BUILD_NUMBER>
-        <VERSION>0.8.0</VERSION>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <package.prefix>/usr</package.prefix>
-        <package.conf.dir>/etc/chukwa</package.conf.dir>
-        <package.log.dir>/var/log/chukwa</package.log.dir>
-        <package.pid.dir>/var/run/chukwa</package.pid.dir>
-        <package.release>1</package.release>
-        <package.version>0.8.0</package.version>
-        <final.name>${project.artifactId}-${package.version}</final.name>
-        <TODO_ALERT_EMAIL>user@example.com</TODO_ALERT_EMAIL>
-        <TODO_CLUSTER_NAME>chukwa</TODO_CLUSTER_NAME>
-        <TODO_COLLECTORS_LOCAL_OUTPUT_DIR>/tmp/chukwa/dataSink/</TODO_COLLECTORS_LOCAL_OUTPUT_DIR>
-        <TODO_COLLECTORS_NAMENODE>hdfs:///</TODO_COLLECTORS_NAMENODE>
-        <TODO_COLLECTORS_ROTATEINTERVAL>300000</TODO_COLLECTORS_ROTATEINTERVAL>
-        <TODO_COLLECTORS_PORT>8080</TODO_COLLECTORS_PORT>
-        <TODO_COLLECTORS_ISFIXEDTIMEROTATORSCHEME>false</TODO_COLLECTORS_ISFIXEDTIMEROTATORSCHEME>
-        <TODO_COLLECTORS_FIXEDTIMEINTERVALOFFSET>30000</TODO_COLLECTORS_FIXEDTIMEINTERVALOFFSET>
-        <TODO_CHUKWA_PID_DIR>/tmp/chukwa/pidDir</TODO_CHUKWA_PID_DIR>
-        <TODO_CHUKWA_LOG_DIR>/tmp/chukwa/log</TODO_CHUKWA_LOG_DIR>
-        <TODO_AGENTS_INSTANCE_NAME>chukwa</TODO_AGENTS_INSTANCE_NAME>
-        <TODO_NAGIOS_SERVER>localhost</TODO_NAGIOS_SERVER>
-        <TODO_DEMUX_IO_SORT_MB>64</TODO_DEMUX_IO_SORT_MB>
-        <TODO_DEMUX_FS_INMEMORY_SIZE_MB>64</TODO_DEMUX_FS_INMEMORY_SIZE_MB>
-        <TODO_DEMUX_IO_SORT_FACTOR>10</TODO_DEMUX_IO_SORT_FACTOR>
-        <CHUKWA_DIR>/chukwa</CHUKWA_DIR>
-        <json-simpleVersion>1.1</json-simpleVersion>
-        <zookeeperVersion>3.4.5</zookeeperVersion>
-        <hbaseVersion>1.2.0</hbaseVersion>
-        <hadoopVersion>2.7.2</hadoopVersion>
-        <solrVersion>5.5.0</solrVersion>
-        <javaVersion>1.8</javaVersion>
-        <!-- <JAVA_HOME>${java.home}</JAVA_HOME> -->
-        <gora.version>0.6</gora.version>
-    </properties>
-
     <name>Apache Chukwa Core</name>
     <description>Chukwa is an open source data collection system for monitoring large distributed systems. 
     Chukwa is built on top of the Hadoop Distributed File System (HDFS) and Map/Reduce framework and 
@@ -113,22 +75,18 @@
           <dependency>
             <groupId>org.owasp.esapi</groupId>
             <artifactId>esapi</artifactId>
-	    <version>2.1.0</version>
           </dependency>
           <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-	    <version>1.8.3</version>
           </dependency>
           <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
-            <version>1.7</version>
           </dependency>
           <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-tools</artifactId>
-            <version>2.0</version>
             <exclusions>
               <exclusion>
                 <groupId>org.apache.struts</groupId>
@@ -147,147 +105,118 @@
           <dependency>
             <groupId>com.rubiconproject.oss</groupId>
             <artifactId>jchronic</artifactId>
-            <version>0.2.6</version>
           </dependency>
           <dependency>
             <groupId>com.github.jsendnsca</groupId>
             <artifactId>jsendnsca</artifactId>
-            <version>2.1.1</version>
           </dependency>
           <dependency>
             <groupId>org.fusesource</groupId>
             <artifactId>sigar</artifactId>
-            <version>1.6.4</version>
           </dependency>
           <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
-            <version>${json-simpleVersion}</version>
           </dependency>
           <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-core</artifactId>
-            <version>5.5.1</version>
           </dependency>
           <dependency>
             <groupId>org.prefuse</groupId>
             <artifactId>prefuse</artifactId>
-            <version>beta-20071021</version>
           </dependency>
           <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>
-            <version>1.7</version>
           </dependency>
           <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.2</version>
           </dependency>
           <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
-            <version>3.1</version>
           </dependency>
           <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.4</version>
           </dependency>
           <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>1.1</version>
           </dependency>
           <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.3</version>
           </dependency>
           <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>3.1</version>
           </dependency>
           <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
-            <version>1.4.1</version>
           </dependency>
           <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging-api</artifactId>
-            <version>1.1</version>
           </dependency>
           <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.8.0</version>
           </dependency>
           <dependency>
             <groupId>org.mortbay.jetty</groupId>
             <artifactId>jetty</artifactId>
-            <version>6.1.26</version>
           </dependency>
           <dependency>
             <groupId>org.mortbay.jetty</groupId>
             <artifactId>jetty-util</artifactId>
-            <version>6.1.26</version>
           </dependency>
           <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
           </dependency>
           <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
           </dependency>
           <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
           </dependency>
           <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-mock</artifactId>
-            <version>2.0.8</version>
           </dependency>
           <dependency>
             <groupId>asm</groupId>
             <artifactId>asm-commons</artifactId>
-            <version>3.3.1</version>
           </dependency>
           <dependency>
             <groupId>jdiff</groupId>
             <artifactId>jdiff</artifactId>
-            <version>1.0.9</version>
           </dependency>
           <dependency>
             <groupId>xmlenc</groupId>
             <artifactId>xmlenc</artifactId>
-            <version>0.52</version>
           </dependency>
           <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
-            <version>2.10.0</version>
           </dependency>
           <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
-            <version>${zookeeperVersion}</version>
           </dependency>
           <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-bundle</artifactId>
-            <version>1.9</version>
           </dependency>
           <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>12.0.1</version>
             <exclusions>
               <exclusion>
                 <groupId>com.google.code.findbugs</groupId>
@@ -298,13 +227,11 @@
           <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>
-            <version>${solrVersion}</version>
             <type>jar</type>
           </dependency>
           <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-test-framework</artifactId>
-            <version>${solrVersion}</version>
             <type>jar</type>
             <scope>test</scope>
             <exclusions>
@@ -325,48 +252,39 @@
           <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
-            <version>1.2.3</version>
           </dependency>
           <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
-            <version>1.2.3</version>
           </dependency>
           <dependency>
             <groupId>org.apache.parquet</groupId>
             <artifactId>parquet-avro</artifactId>
-            <version>1.7.0</version>
           </dependency>
           <!-- BEGINNING OF GORA DEPENDENCIES -->
           <dependency>
             <groupId>org.apache.gora</groupId>
             <artifactId>gora-core</artifactId>
-            <version>${gora.version}</version>
           </dependency>
           <dependency>
             <groupId>org.apache.gora</groupId>
             <artifactId>gora-hbase</artifactId>
-            <version>${gora.version}</version>
           </dependency>
           <!--dependency>
             <groupId>org.apache.gora</groupId>
             <artifactId>gora-cassandra</artifactId>
-            <version>${gora.version}</version>
           </dependency-->
           <!--dependency>
             <groupId>org.apache.gora</groupId>
             <artifactId>gora-mongodb</artifactId>
-            <version>${gora.version}</version>
           </dependency-->
           <!--dependency>
             <groupId>org.apache.gora</groupId>
             <artifactId>gora-solr</artifactId>
-            <version>${gora.version}</version>
           </dependency-->
           <!--dependency>
             <groupId>org.apache.gora</groupId>
             <artifactId>gora-accumulo</artifactId>
-            <version>${gora.version}</version>
           </dependency-->
           
           <!-- END OF GORA DEPENDENCIES -->
@@ -508,9 +426,8 @@
                       <goals>
                         <goal>compile</goal>
                       </goals>
-                      <compilerVersion>1.7</compilerVersion>
-                      <source>1.7</source>
-                      <target>1.7</target>
+                      <source>${javaVersion}</source>
+                      <target>${javaVersion}</target>
                       <excludes>
                         <exclude>**/ChukwaJobTrackerInstrumentation.java</exclude>
                       </excludes>
@@ -1071,7 +988,6 @@
                 <dependency>
                     <groupId>org.apache.hbase</groupId>
                     <artifactId>hbase-common</artifactId>
-                    <version>${hbaseVersion}</version>
                     <exclusions>
                         <exclusion>
                             <groupId>com.sun.jersey</groupId>
@@ -1118,7 +1034,6 @@
                 <dependency>
                     <groupId>org.apache.hbase</groupId>
                     <artifactId>hbase-client</artifactId>
-                    <version>${hbaseVersion}</version>
                     <exclusions>
                         <exclusion>
                             <groupId>com.sun.jersey</groupId>
@@ -1149,7 +1064,6 @@
                 <dependency>
                     <groupId>org.apache.hbase</groupId>
                     <artifactId>hbase-server</artifactId>
-                    <version>${hbaseVersion}</version>
                     <exclusions>
                         <exclusion>
                             <groupId>com.sun.jersey</groupId>
@@ -1181,14 +1095,12 @@
                     <groupId>org.apache.hbase</groupId>
                     <artifactId>hbase-common</artifactId>
                     <classifier>tests</classifier>
-                    <version>${hbaseVersion}</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hbase</groupId>
                     <artifactId>hbase-server</artifactId>
                     <classifier>tests</classifier>
-                    <version>${hbaseVersion}</version>
                     <scope>test</scope>
                     <exclusions>
                         <exclusion>
@@ -1217,20 +1129,17 @@
                     <groupId>org.apache.hbase</groupId>
                     <artifactId>hbase-hadoop-compat</artifactId>
                     <classifier>tests</classifier>
-                    <version>${hbaseVersion}</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hbase</groupId>
                     <artifactId>hbase-hadoop2-compat</artifactId>
                     <classifier>tests</classifier>
-                    <version>${hbaseVersion}</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-common</artifactId>
-                    <version>${hadoopVersion}</version>
                     <exclusions>
                         <exclusion>
                             <groupId>javax.servlet.jsp</groupId>
@@ -1253,38 +1162,31 @@
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-auth</artifactId>
-                    <version>${hadoopVersion}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-client</artifactId>
-                    <version>${hadoopVersion}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-mapreduce-client-core</artifactId>
-                    <version>${hadoopVersion}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-yarn-common</artifactId>
-                    <version>${hadoopVersion}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-hdfs</artifactId>
-                    <version>${hadoopVersion}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-yarn-server-tests</artifactId>
-                    <version>${hadoopVersion}</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.hadoop</groupId>
-	            <artifactId>hadoop-minicluster</artifactId>
-                    <version>${hadoopVersion}</version>
+                    <artifactId>hadoop-minicluster</artifactId>
                 </dependency>
             </dependencies>
         </profile>
@@ -1356,10 +1258,7 @@
         </repository>
     </repositories>
 
-    <dependencyManagement>
-        <dependencies>
-        </dependencies>
-    </dependencyManagement>
+
 
     <reporting>
       <plugins>
@@ -1379,7 +1278,7 @@
                 </reportSet>
             </reportSets>
             <configuration>
-                <targetJdk>1.7</targetJdk>
+                <targetJdk>${javaVersion}</targetJdk>
             </configuration>
         </plugin>
         <plugin>
