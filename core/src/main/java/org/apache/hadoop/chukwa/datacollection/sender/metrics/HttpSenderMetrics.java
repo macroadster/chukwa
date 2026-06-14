@@ -17,65 +17,55 @@
  */
 package org.apache.hadoop.chukwa.datacollection.sender.metrics;
 
-import org.apache.hadoop.metrics.MetricsContext;
-import org.apache.hadoop.metrics.MetricsRecord;
-import org.apache.hadoop.metrics.MetricsUtil;
-import org.apache.hadoop.metrics.Updater;
-import org.apache.hadoop.metrics.util.MetricsBase;
-import org.apache.hadoop.metrics.util.MetricsRegistry;
-import org.apache.hadoop.metrics.util.MetricsTimeVaryingInt;
+import java.lang.management.ManagementFactory;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.management.ObjectName;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-public class HttpSenderMetrics implements Updater {
+public class HttpSenderMetrics implements HttpSenderActivityMBean {
+  private static final Log LOG = LogFactory.getLog(HttpSenderMetrics.class);
 
-  public MetricsRegistry registry = new MetricsRegistry();
-  private MetricsRecord metricsRecord;
-  private HttpSenderActivityMBean mbean;
-  
-  
-  public MetricsTimeVaryingInt collectorRollover =
-    new MetricsTimeVaryingInt("collectorRollover", registry,"number of collector rollovert");
-  
-  public MetricsTimeVaryingInt httpPost =
-    new MetricsTimeVaryingInt("httpPost", registry,"number of HTTP post");
-  
-  public MetricsTimeVaryingInt httpException =
-    new MetricsTimeVaryingInt("httpException", registry,"number of HTTP Exception");
+  private final AtomicInteger collectorRollover = new AtomicInteger(0);
+  private final AtomicInteger httpPost = new AtomicInteger(0);
+  private final AtomicInteger httpException = new AtomicInteger(0);
+  private final AtomicInteger httpThrowable = new AtomicInteger(0);
+  private final AtomicInteger httpTimeOutException = new AtomicInteger(0);
+  private ObjectName mbeanName;
 
-  public MetricsTimeVaryingInt httpThrowable =
-    new MetricsTimeVaryingInt("httpThrowable", registry,"number of HTTP Throwable exception");
-  
-  public MetricsTimeVaryingInt httpTimeOutException =
-    new MetricsTimeVaryingInt("httpTimeOutException", registry,"number of HTTP TimeOutException");
-  
-  /** Creates a new instance of HttpSenderMetrics 
-   * @param processName is jvm process name
-   * @param recordName is Hadoop metrics data type
-   * */
   public HttpSenderMetrics(String processName, String recordName) {
-      MetricsContext context = MetricsUtil.getContext(processName);
-      metricsRecord = MetricsUtil.createRecord(context, recordName);
-      metricsRecord.setTag("process", processName);
-      mbean = new HttpSenderActivityMBean(registry, recordName);
-      context.registerUpdater(this);
-  }
-
-
-  /**
-   * Since this object is a registered updater, this method will be called
-   * periodically, e.g. every 5 seconds.
-   */
-  public void doUpdates(MetricsContext unused) {
-    synchronized (this) {
-      for (MetricsBase m : registry.getMetricsList()) {
-        m.pushMetric(metricsRecord);
-      }
+    try {
+      mbeanName = new ObjectName("chukwa:type=HttpSenderActivity,name=" + recordName);
+      ManagementFactory.getPlatformMBeanServer().registerMBean(this, mbeanName);
+    } catch (Exception e) {
+      LOG.warn("Failed to register HttpSenderMetrics MBean", e);
     }
-    metricsRecord.update();
   }
+
+  @Override
+  public int getCollectorRollover() { return collectorRollover.get(); }
+  @Override
+  public int getHttpPost() { return httpPost.get(); }
+  @Override
+  public int getHttpException() { return httpException.get(); }
+  @Override
+  public int getHttpThrowable() { return httpThrowable.get(); }
+  @Override
+  public int getHttpTimeOutException() { return httpTimeOutException.get(); }
+
+  public void incCollectorRollover() { collectorRollover.incrementAndGet(); }
+  public void incHttpPost() { httpPost.incrementAndGet(); }
+  public void incHttpException() { httpException.incrementAndGet(); }
+  public void incHttpThrowable() { httpThrowable.incrementAndGet(); }
+  public void incHttpTimeOutException() { httpTimeOutException.incrementAndGet(); }
 
   public void shutdown() {
-    if (mbean != null)
-      mbean.shutdown();
+    try {
+      if (mbeanName != null) {
+        ManagementFactory.getPlatformMBeanServer().unregisterMBean(mbeanName);
+      }
+    } catch (Exception e) {
+      LOG.warn("Failed to unregister HttpSenderMetrics MBean", e);
+    }
   }
-
 }

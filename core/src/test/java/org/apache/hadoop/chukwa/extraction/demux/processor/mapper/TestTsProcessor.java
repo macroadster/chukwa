@@ -148,7 +148,7 @@ public class TestTsProcessor extends TestCase {
     assertNotNull("Output record not found.", record);
     assertEquals("Output record time not correct.", date.getTime(), record.getTime());
     assertEquals("Output record body not correct.", recordData,
-            new String(record.getMapFields().get("body").get()));
+            record.getValue("body"));
   }
 
   private static ChukwaRecordKey buildKey(Date date, String dataSource, String dataType) {

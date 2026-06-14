@@ -536,9 +536,7 @@ public class Heatmap {
    * populate data structures for rendering
    * @return heat map data JSON
    */
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
-      "SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE", 
-      justification = "Dynamic based upon tables in the database")
+  @SuppressWarnings("SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE")
   public HeatmapData getData() {
     // preliminary setup
     OfflineTimeHandler time_offline;

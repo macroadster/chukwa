@@ -89,10 +89,14 @@ public class GoraWriter extends PipelineableWriter {
    */
   @Override
   public void close() throws WriterException {
-    if (chunkStore != null) {
-      chunkStore.flush();
-    } else {
-      chunkStore.close();
+    try {
+      if (chunkStore != null) {
+        chunkStore.flush();
+      } else {
+        chunkStore.close();
+      }
+    } catch (org.apache.gora.util.GoraException e) {
+      throw new WriterException(e);
     }
     log.debug("Gora datastore successfully closed.");
   }

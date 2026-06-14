@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.apache.hadoop.chukwa.extraction.engine.*;
+import org.apache.hadoop.chukwa.extraction.engine.Record;
 import org.apache.hadoop.mapred.*;
 
 /**

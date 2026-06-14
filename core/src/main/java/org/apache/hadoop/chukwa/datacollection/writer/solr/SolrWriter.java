@@ -33,6 +33,8 @@ import org.apache.hadoop.chukwa.datacollection.writer.WriterException;
 import org.apache.hadoop.chukwa.util.ExceptionUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.log4j.Logger;
+import java.util.Collections;
+import java.util.Optional;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -64,7 +66,9 @@ public class SolrWriter extends PipelineableWriter {
     }
     String collection = c.get("solr.collection", "logs");
     if(client == null) {
-      client = new CloudSolrClient(serverName);
+      client = new CloudSolrClient.Builder(
+          Collections.singletonList(serverName), Optional.empty())
+          .build();
       client.setDefaultCollection(collection);
     }
   }
@@ -111,7 +115,7 @@ public class SolrWriter extends PipelineableWriter {
         }
         try {
           Date d = sdf.parse(data);
-          doc.addField(DATE, d, 1.0f);
+          doc.addField(DATE, d);
         } catch(ParseException e) {
           
         }

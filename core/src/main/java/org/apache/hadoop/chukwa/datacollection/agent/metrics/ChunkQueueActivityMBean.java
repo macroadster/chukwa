@@ -18,26 +18,10 @@
 
 package org.apache.hadoop.chukwa.datacollection.agent.metrics;
 
-import javax.management.ObjectName;
-
-import org.apache.hadoop.metrics.util.MBeanUtil;
-import org.apache.hadoop.metrics.util.MetricsDynamicMBeanBase;
-import org.apache.hadoop.metrics.util.MetricsRegistry;
-
-public class ChunkQueueActivityMBean extends MetricsDynamicMBeanBase {
-  final private ObjectName mbeanName;
-
-  public ChunkQueueActivityMBean(final MetricsRegistry mr, final String serviceName) {
-    super(mr, "ChunkQueue layer statistics");
-    mbeanName = MBeanUtil.registerMBean(serviceName,
-          "QueueActivity", this);
-  }
-
-
-  public void shutdown() {
-    if (mbeanName != null)
-      MBeanUtil.unregisterMBean(mbeanName);
-  }
-
-
+public interface ChunkQueueActivityMBean {
+  int getQueueSize();
+  long getDataSize();
+  int getAddedChunk();
+  int getRemovedChunk();
+  int getFullQueue();
 }

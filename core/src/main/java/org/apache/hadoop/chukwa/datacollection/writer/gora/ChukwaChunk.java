@@ -740,6 +740,11 @@ public class ChukwaChunk extends org.apache.gora.persistency.impl.PersistentBase
     }
   }
 
+  @Override
+  public ChukwaChunk clone() {
+    return newBuilder(this).build();
+  }
+
   public ChukwaChunk.Tombstone getTombstone() {
     return TOMBSTONE;
   }

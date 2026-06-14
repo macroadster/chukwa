@@ -17,61 +17,48 @@
  */
 package org.apache.hadoop.chukwa.datacollection.agent.metrics;
 
-import org.apache.hadoop.metrics.MetricsContext;
-import org.apache.hadoop.metrics.MetricsRecord;
-import org.apache.hadoop.metrics.MetricsUtil;
-import org.apache.hadoop.metrics.Updater;
-import org.apache.hadoop.metrics.util.MetricsBase;
-import org.apache.hadoop.metrics.util.MetricsIntValue;
-import org.apache.hadoop.metrics.util.MetricsRegistry;
-import org.apache.hadoop.metrics.util.MetricsTimeVaryingInt;
+import java.lang.management.ManagementFactory;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.management.ObjectName;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-public class AgentMetrics implements Updater {
+public class AgentMetrics implements AgentActivityMBean {
+  private static final Log LOG = LogFactory.getLog(AgentMetrics.class);
   public static final AgentMetrics agentMetrics = new AgentMetrics("chukwaAgent", "metrics");
-  
-  public MetricsRegistry registry = new MetricsRegistry();
-  private MetricsRecord metricsRecord;
-  private AgentActivityMBean agentActivityMBean;
 
-  public MetricsIntValue adaptorCount =
-    new MetricsIntValue("adaptorCount", registry,"number of new adaptor");
+  private final AtomicInteger adaptorCount = new AtomicInteger(0);
+  private final AtomicInteger addedAdaptor = new AtomicInteger(0);
+  private final AtomicInteger removedAdaptor = new AtomicInteger(0);
+  private ObjectName mbeanName;
 
-  public MetricsTimeVaryingInt addedAdaptor =
-    new MetricsTimeVaryingInt("addedAdaptor", registry,"number of added adaptor");
-  
-  public MetricsTimeVaryingInt removedAdaptor =
-    new MetricsTimeVaryingInt("removedAdaptor", registry,"number of removed adaptor");
-  
-  /** Creates a new instance of AgentMetrics 
-   * @param processName is jvm name of agent process
-   * @param recordName is mbean record name
-   **/
   public AgentMetrics(String processName, String recordName) {
-      MetricsContext context = MetricsUtil.getContext(processName);
-      metricsRecord = MetricsUtil.createRecord(context, recordName);
-      metricsRecord.setTag("process", processName);
-      agentActivityMBean = new AgentActivityMBean(registry, recordName);
-      context.registerUpdater(this);
-      
-  }
-
-
-  /**
-   * Since this object is a registered updater, this method will be called
-   * periodically, e.g. every 5 seconds.
-   */
-  public void doUpdates(MetricsContext unused) {
-    synchronized (this) {
-      for (MetricsBase m : registry.getMetricsList()) {
-        m.pushMetric(metricsRecord);
-      }
+    try {
+      mbeanName = new ObjectName("chukwa:type=AgentActivity,name=" + recordName);
+      ManagementFactory.getPlatformMBeanServer().registerMBean(this, mbeanName);
+    } catch (Exception e) {
+      LOG.warn("Failed to register AgentMetrics MBean", e);
     }
-    metricsRecord.update();
   }
+
+  @Override
+  public int getAdaptorCount() { return adaptorCount.get(); }
+  @Override
+  public int getAddedAdaptor() { return addedAdaptor.get(); }
+  @Override
+  public int getRemovedAdaptor() { return removedAdaptor.get(); }
+
+  public void setAdaptorCount(int value) { adaptorCount.set(value); }
+  public void incAddedAdaptor() { addedAdaptor.incrementAndGet(); }
+  public void incRemovedAdaptor() { removedAdaptor.incrementAndGet(); }
 
   public void shutdown() {
-    if (agentActivityMBean != null)
-      agentActivityMBean.shutdown();
+    try {
+      if (mbeanName != null) {
+        ManagementFactory.getPlatformMBeanServer().unregisterMBean(mbeanName);
+      }
+    } catch (Exception e) {
+      LOG.warn("Failed to unregister AgentMetrics MBean", e);
+    }
   }
-
 }

@@ -30,7 +30,7 @@ import org.apache.hadoop.chukwa.hicc.bean.Series;
 import org.apache.hadoop.chukwa.hicc.bean.SeriesMetaData;
 import org.apache.hadoop.chukwa.hicc.bean.Widget;
 
-@edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
+@SuppressWarnings("MS_SHOULD_BE_FINAL")
 public class Examples {
   // Chart examples
   public static Chart SYSTEM_LOAD_AVERAGE;

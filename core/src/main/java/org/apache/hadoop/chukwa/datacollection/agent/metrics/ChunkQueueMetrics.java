@@ -17,68 +17,56 @@
  */
 package org.apache.hadoop.chukwa.datacollection.agent.metrics;
 
-import org.apache.hadoop.metrics.MetricsContext;
-import org.apache.hadoop.metrics.MetricsRecord;
-import org.apache.hadoop.metrics.MetricsUtil;
-import org.apache.hadoop.metrics.Updater;
-import org.apache.hadoop.metrics.util.MetricsBase;
-import org.apache.hadoop.metrics.util.MetricsIntValue;
-import org.apache.hadoop.metrics.util.MetricsLongValue;
-import org.apache.hadoop.metrics.util.MetricsRegistry;
-import org.apache.hadoop.metrics.util.MetricsTimeVaryingInt;
+import java.lang.management.ManagementFactory;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import javax.management.ObjectName;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-public class ChunkQueueMetrics implements Updater {
+public class ChunkQueueMetrics implements ChunkQueueActivityMBean {
+  private static final Log LOG = LogFactory.getLog(ChunkQueueMetrics.class);
 
-  public MetricsRegistry registry = new MetricsRegistry();
-  private MetricsRecord metricsRecord;
-  private ChunkQueueActivityMBean mbean;
+  private final AtomicInteger queueSize = new AtomicInteger(0);
+  private final AtomicLong dataSize = new AtomicLong(0);
+  private final AtomicInteger addedChunk = new AtomicInteger(0);
+  private final AtomicInteger removedChunk = new AtomicInteger(0);
+  private final AtomicInteger fullQueue = new AtomicInteger(0);
+  private ObjectName mbeanName;
 
-
-  public MetricsIntValue queueSize =
-    new MetricsIntValue("queueSize", registry,"Queue size");
-  
-  public MetricsLongValue dataSize =
-    new MetricsLongValue("dataSize", registry,"Data size");
-  
-  public MetricsTimeVaryingInt addedChunk =
-    new MetricsTimeVaryingInt("addedChunk", registry,"number of added chunk");
-  
-  public MetricsTimeVaryingInt removedChunk =
-    new MetricsTimeVaryingInt("removedChunk", registry,"number of removed chunk");
-  
-  public MetricsIntValue fullQueue =
-    new MetricsIntValue("fullQueue", registry,"Queue is full");
-  
-  
-  /** Creates a new instance of QueueMetrics 
-   * @param processName is jvm process of Agent process
-   * @param recordName is mbean record name
-   * */
   public ChunkQueueMetrics(String processName, String recordName) {
-      MetricsContext context = MetricsUtil.getContext(processName);
-      metricsRecord = MetricsUtil.createRecord(context, recordName);
-      mbean = new ChunkQueueActivityMBean(registry, recordName);
-      context.registerUpdater(this);
-      
-  }
-
-
-  /**
-   * Since this object is a registered updater, this method will be called
-   * periodically, e.g. every 5 seconds.
-   */
-  public void doUpdates(MetricsContext unused) {
-    synchronized (this) {
-      for (MetricsBase m : registry.getMetricsList()) {
-        m.pushMetric(metricsRecord);
-      }
+    try {
+      mbeanName = new ObjectName("chukwa:type=QueueActivity,name=" + recordName);
+      ManagementFactory.getPlatformMBeanServer().registerMBean(this, mbeanName);
+    } catch (Exception e) {
+      LOG.warn("Failed to register ChunkQueueMetrics MBean", e);
     }
-    metricsRecord.update();
   }
+
+  @Override
+  public int getQueueSize() { return queueSize.get(); }
+  @Override
+  public long getDataSize() { return dataSize.get(); }
+  @Override
+  public int getAddedChunk() { return addedChunk.get(); }
+  @Override
+  public int getRemovedChunk() { return removedChunk.get(); }
+  @Override
+  public int getFullQueue() { return fullQueue.get(); }
+
+  public void setQueueSize(int value) { queueSize.set(value); }
+  public void setDataSize(long value) { dataSize.set(value); }
+  public void incAddedChunk() { addedChunk.incrementAndGet(); }
+  public void incRemovedChunk() { removedChunk.incrementAndGet(); }
+  public void setFullQueue(int value) { fullQueue.set(value); }
 
   public void shutdown() {
-    if (mbean != null)
-      mbean.shutdown();
+    try {
+      if (mbeanName != null) {
+        ManagementFactory.getPlatformMBeanServer().unregisterMBean(mbeanName);
+      }
+    } catch (Exception e) {
+      LOG.warn("Failed to unregister ChunkQueueMetrics MBean", e);
+    }
   }
-
 }

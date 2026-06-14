@@ -23,7 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
+import org.jsoup.safety.Safelist;
 import org.owasp.esapi.ESAPI;
 
 public class XssFilter {
@@ -79,7 +79,7 @@ public class XssFilter {
       value = value.replaceAll("\0", "");
  
       // Clean out HTML
-      value = Jsoup.clean( value, Whitelist.none() );
+      value = Jsoup.clean( value, Safelist.none() );
  
       return value;
     }

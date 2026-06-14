@@ -180,9 +180,7 @@ public class MetricDataLoader implements Callable {
     return( sb.toString()); 
   }
   
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
-      "SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE", 
-      justification = "Dynamic based upon tables in the database")
+  @SuppressWarnings("SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE")
   public boolean run() throws IOException {
     boolean first=true;
     log.info("StreamName: " + source.getName());

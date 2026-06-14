@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.apache.hadoop.chukwa.extraction.demux.*;
 import org.apache.hadoop.chukwa.extraction.engine.*;
+import org.apache.hadoop.chukwa.extraction.engine.Record;
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;

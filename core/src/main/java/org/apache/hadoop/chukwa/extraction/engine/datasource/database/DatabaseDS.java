@@ -45,9 +45,7 @@ import org.apache.commons.logging.LogFactory;
 public class DatabaseDS implements DataSource {
   private static final Log log = LogFactory.getLog(DatabaseDS.class);
 
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
-      "SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE", 
-      justification = "Dynamic based upon tables in the database")
+  @SuppressWarnings("SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE")
   public SearchResult search(SearchResult result, String cluster,
       String dataSource, long t0, long t1, String filter, Token token)
       throws DataSourceException {

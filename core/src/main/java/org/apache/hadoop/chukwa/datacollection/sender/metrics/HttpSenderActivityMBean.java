@@ -18,28 +18,10 @@
 
 package org.apache.hadoop.chukwa.datacollection.sender.metrics;
 
-import javax.management.ObjectName;
-
-import org.apache.hadoop.metrics.util.MBeanUtil;
-import org.apache.hadoop.metrics.util.MetricsDynamicMBeanBase;
-import org.apache.hadoop.metrics.util.MetricsRegistry;
-
-public class HttpSenderActivityMBean extends MetricsDynamicMBeanBase {
-  final private ObjectName mbeanName;
-
-
-
-  public HttpSenderActivityMBean(final MetricsRegistry mr, final String serviceName) {
-    super(mr, "Http Sender layer statistics");
-    mbeanName = MBeanUtil.registerMBean(serviceName,
-          "HttpSenderActivity", this);
-  }
-
-
-  public void shutdown() {
-    if (mbeanName != null)
-      MBeanUtil.unregisterMBean(mbeanName);
-  }
-
-
+public interface HttpSenderActivityMBean {
+  int getCollectorRollover();
+  int getHttpPost();
+  int getHttpException();
+  int getHttpThrowable();
+  int getHttpTimeOutException();
 }

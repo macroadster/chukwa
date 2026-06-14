@@ -45,45 +45,45 @@
         <TODO_DEMUX_FS_INMEMORY_SIZE_MB>64</TODO_DEMUX_FS_INMEMORY_SIZE_MB>
         <TODO_DEMUX_IO_SORT_FACTOR>10</TODO_DEMUX_IO_SORT_FACTOR>
         <CHUKWA_DIR>/chukwa</CHUKWA_DIR>
-        <json-simpleVersion>1.1</json-simpleVersion>
-        <zookeeperVersion>3.4.5</zookeeperVersion>
-        <hbaseVersion>1.2.0</hbaseVersion>
-        <hadoopVersion>2.7.2</hadoopVersion>
-        <solrVersion>5.5.0</solrVersion>
-        <javaVersion>1.8</javaVersion>
+        <json-simpleVersion>1.1.1</json-simpleVersion>
+        <zookeeperVersion>3.8.4</zookeeperVersion>
+        <hbaseVersion>2.5.8</hbaseVersion>
+        <hadoopVersion>3.3.6</hadoopVersion>
+        <solrVersion>8.11.3</solrVersion>
+        <javaVersion>21</javaVersion>
         <!-- <JAVA_HOME>${java.home}</JAVA_HOME> -->
-        <gora.version>0.6</gora.version>
-        <esapi.version>2.1.0</esapi.version>
-        <jsoup.version>1.8.3</jsoup.version>
-        <velocity.version>1.7</velocity.version>
-        <velocity-tools.version>2.0</velocity-tools.version>
+        <gora.version>0.9</gora.version>
+        <esapi.version>2.5.3.1</esapi.version>
+        <jsoup.version>1.17.2</jsoup.version>
+        <velocity.version>2.3</velocity.version>
+        <velocity-tools.version>3.1</velocity-tools.version>
         <jchronic.version>0.2.6</jchronic.version>
         <jsendnsca.version>2.1.1</jsendnsca.version>
         <sigar.version>1.6.4</sigar.version>
-        <activemq.version>5.5.1</activemq.version>
+        <activemq.version>5.18.3</activemq.version>
         <prefuse.version>beta-20071021</prefuse.version>
-        <commons-configuration.version>1.7</commons-configuration.version>
-        <commons-fileupload.version>1.2</commons-fileupload.version>
+        <commons-configuration.version>1.10</commons-configuration.version>
+        <commons-fileupload.version>1.5</commons-fileupload.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
-        <commons-lang3.version>3.4</commons-lang3.version>
-        <commons-logging.version>1.1</commons-logging.version>
-        <commons-codec.version>1.3</commons-codec.version>
-        <commons-collections.version>3.1</commons-collections.version>
-        <commons-net.version>1.4.1</commons-net.version>
-        <commons-beanutils.version>1.8.0</commons-beanutils.version>
-        <jetty.version>6.1.26</jetty.version>
-        <junit.version>4.10</junit.version>
-        <slf4j.version>1.6.1</slf4j.version>
-        <log4j.version>1.2.16</log4j.version>
-        <spring-mock.version>2.0.8</spring-mock.version>
-        <asm-commons.version>3.3.1</asm-commons.version>
+        <commons-lang3.version>3.14.0</commons-lang3.version>
+        <commons-logging.version>1.3.0</commons-logging.version>
+        <commons-codec.version>1.16.1</commons-codec.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <commons-net.version>3.10.0</commons-net.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <jetty.version>9.4.54.v20240208</jetty.version>
+        <junit.version>4.13.2</junit.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <spring-test.version>5.3.31</spring-test.version>
+        <asm-commons.version>9.6</asm-commons.version>
         <jdiff.version>1.0.9</jdiff.version>
         <xmlenc.version>0.52</xmlenc.version>
-        <xerces.version>2.10.0</xerces.version>
-        <jersey.version>1.9</jersey.version>
-        <guava.version>12.0.1</guava.version>
-        <shiro.version>1.2.3</shiro.version>
-        <parquet.version>1.7.0</parquet.version>
+        <xerces.version>2.12.2</xerces.version>
+        <jersey.version>1.19.4</jersey.version>
+        <guava.version>33.0.0-jre</guava.version>
+        <shiro.version>1.13.0</shiro.version>
+        <parquet.version>1.13.1</parquet.version>
     </properties>
 
     <name>Apache Chukwa</name>
@@ -234,15 +234,7 @@
         </repository>
         <repository>
             <id>clojars</id>
-            <url>http://clojars.org/repo/</url>
-        </repository>
-        <repository>
-            <id>Apache</id>
-            <url>http://repo.maven.apache.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>pentaho</id>
-            <url>http://repository.pentaho.org/artifactory/repo/</url>
+            <url>https://clojars.org/repo/</url>
         </repository>
     </repositories>
 
@@ -260,12 +252,12 @@
           </dependency>
           <dependency>
             <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
+            <artifactId>velocity-engine-core</artifactId>
             <version>${velocity.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity-tools</artifactId>
+            <groupId>org.apache.velocity.tools</groupId>
+            <artifactId>velocity-tools-generic</artifactId>
             <version>${velocity-tools.version}</version>
           </dependency>
           <dependency>
@@ -290,7 +282,7 @@
           </dependency>
           <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-core</artifactId>
+            <artifactId>activemq-client</artifactId>
             <version>${activemq.version}</version>
           </dependency>
           <dependency>
@@ -338,24 +330,30 @@
             <artifactId>commons-net</artifactId>
             <version>${commons-net.version}</version>
           </dependency>
-          <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging-api</artifactId>
-            <version>${commons-logging.version}</version>
-          </dependency>
+          <!-- commons-logging-api merged into commons-logging -->
           <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>${commons-beanutils.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty</artifactId>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
             <version>${jetty.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.mortbay.jetty</groupId>
+            <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
+            <version>${jetty.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
             <version>${jetty.version}</version>
           </dependency>
           <dependency>
@@ -375,11 +373,11 @@
           </dependency>
           <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-mock</artifactId>
-            <version>${spring-mock.version}</version>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-test.version}</version>
           </dependency>
           <dependency>
-            <groupId>asm</groupId>
+            <groupId>org.ow2.asm</groupId>
             <artifactId>asm-commons</artifactId>
             <version>${asm-commons.version}</version>
           </dependency>
@@ -530,12 +528,17 @@
           </dependency>
           <dependency>
             <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-hadoop2-compat</artifactId>
+            <artifactId>hbase-mapreduce</artifactId>
             <version>${hbaseVersion}</version>
           </dependency>
           <dependency>
             <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-hadoop2-compat</artifactId>
+            <artifactId>hbase-zookeeper</artifactId>
+            <version>${hbaseVersion}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-zookeeper</artifactId>
             <version>${hbaseVersion}</version>
             <classifier>tests</classifier>
           </dependency>
@@ -546,11 +549,11 @@
       <plugins>
         <plugin>
             <artifactId>maven-jxr-plugin</artifactId>
-            <version>2.3</version>
+            <version>3.3.2</version>
         </plugin>
         <plugin>
             <artifactId>maven-pmd-plugin</artifactId>
-            <version>3.4</version>
+            <version>3.21.2</version>
             <reportSets>
                 <reportSet>
                     <reports>
@@ -565,8 +568,8 @@
         </plugin>
         <plugin>
             <groupId>org.codehaus.mojo</groupId>
-            <artifactId>findbugs-maven-plugin</artifactId>
-            <version>3.0.1</version>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <version>4.8.3.1</version>
             <configuration>
                 <threshold>Normal</threshold>
                 <effort>Max</effort>
@@ -575,7 +578,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>2.9</version>
+          <version>3.5.0</version>
           <configuration>
             <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
           </configuration>
@@ -590,7 +593,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.8</version>
+          <version>3.6.3</version>
           <reportSets>
             <reportSet>
               <id>javadoc</id>

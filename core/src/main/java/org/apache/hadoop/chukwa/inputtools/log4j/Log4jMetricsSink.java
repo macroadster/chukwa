@@ -21,7 +21,7 @@ package org.apache.hadoop.chukwa.inputtools.log4j;
 import org.json.simple.JSONObject;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
-import org.apache.commons.configuration.SubsetConfiguration;
+import org.apache.commons.configuration2.SubsetConfiguration;
 import org.apache.hadoop.metrics2.AbstractMetric;
 import org.apache.hadoop.metrics2.MetricsRecord;
 import org.apache.hadoop.metrics2.MetricsSink;

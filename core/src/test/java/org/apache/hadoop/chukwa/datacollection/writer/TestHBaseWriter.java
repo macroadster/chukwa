@@ -75,7 +75,6 @@ public class TestHBaseWriter extends TestCase{
   
   public void tearDown() throws Exception {
     util.shutdownMiniCluster();
-    util.shutdownMiniZKCluster();
   }
   
   public void testWriters() {

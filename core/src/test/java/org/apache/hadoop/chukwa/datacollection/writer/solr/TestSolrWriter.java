@@ -29,6 +29,8 @@ import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.core.CoreContainer;
 
+import java.nio.file.Paths;
+
 import junit.framework.Assert;
 
 public class TestSolrWriter extends SolrJettyTestBase {
@@ -39,8 +41,7 @@ public class TestSolrWriter extends SolrJettyTestBase {
   public void setUp() {
     try {
       String dataDir = System.getProperty("CHUKWA_DATA_DIR", "target/test/var");
-      container = new CoreContainer(dataDir);
-      container.load();
+      container = CoreContainer.createAndLoad(Paths.get(dataDir));
 
       server = new EmbeddedSolrServer(container, "collection1" );
       super.setUp();
@@ -52,7 +53,7 @@ public class TestSolrWriter extends SolrJettyTestBase {
   
   public void tearDown() throws Exception {
     if (server != null) {
-      server.shutdown();
+      server.close();
     }
     super.tearDown();
   }

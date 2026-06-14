@@ -447,8 +447,8 @@ public class ChukwaAgent implements AdaptorManager {
           adaptor.start(adaptorID, dataType, offset, DataFactory
               .getInstance().getEventQueue());
           log.info("started a new adaptor, id = " + adaptorID + " function=["+adaptor.toString()+"]");
-          ChukwaAgent.agentMetrics.adaptorCount.set(adaptorsByName.size());
-          ChukwaAgent.agentMetrics.addedAdaptor.inc();
+          ChukwaAgent.agentMetrics.setAdaptorCount(adaptorsByName.size());
+          ChukwaAgent.agentMetrics.incAddedAdaptor();
           return adaptorID;
 
         } catch (Exception e) {
@@ -653,8 +653,8 @@ public class ChukwaAgent implements AdaptorManager {
       adaptorPositions.remove(toStop);
       adaptorStatsManager.remove(toStop);
     }
-    ChukwaAgent.agentMetrics.adaptorCount.set(adaptorsByName.size());
-    ChukwaAgent.agentMetrics.removedAdaptor.inc();
+    ChukwaAgent.agentMetrics.setAdaptorCount(adaptorsByName.size());
+    ChukwaAgent.agentMetrics.incRemovedAdaptor();
     
     try {
       offset = toStop.shutdown(shutdownMode);

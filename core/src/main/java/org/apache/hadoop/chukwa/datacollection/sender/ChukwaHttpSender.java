@@ -300,9 +300,9 @@ public class ChukwaHttpSender implements ChukwaSender {
       } catch (Throwable e) {
         log.error("Http post exception on "+ currCollector +": "+ e.toString());
         log.debug("Http post exception on "+ currCollector, e);
-        ChukwaHttpSender.metrics.httpThrowable.inc();
+        ChukwaHttpSender.metrics.incHttpThrowable();
         if (collectors.hasNext()) {
-          ChukwaHttpSender.metrics.collectorRollover.inc();
+          ChukwaHttpSender.metrics.incCollectorRollover();
           boolean repeatPost = failedCollector(currCollector);
           currCollector = collectors.next();
           if(repeatPost)
@@ -365,15 +365,15 @@ public class ChukwaHttpSender implements ChukwaSender {
     method.setPath(dest);
 
     // Send POST request
-    ChukwaHttpSender.metrics.httpPost.inc();
+    ChukwaHttpSender.metrics.incHttpPost();
     
     int statusCode = client.executeMethod(method);
 
     if (statusCode != HttpStatus.SC_OK) {
-      ChukwaHttpSender.metrics.httpException.inc();
+      ChukwaHttpSender.metrics.incHttpException();
       
       if (statusCode == HttpStatus.SC_REQUEST_TIMEOUT ) {
-        ChukwaHttpSender.metrics.httpTimeOutException.inc();
+        ChukwaHttpSender.metrics.incHttpTimeOutException();
       }
       
       log.error(">>>>>> HTTP response from " + dest + " statusLine: " + method.getStatusLine());

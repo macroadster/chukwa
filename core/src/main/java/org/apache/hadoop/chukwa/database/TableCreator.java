@@ -47,9 +47,7 @@ public class TableCreator {
     createTables(now, now);
   }
 
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
-      "SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE", 
-      justification = "Dynamic based upon tables in the database")
+  @SuppressWarnings("SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE")
   public void createTables(long start, long end) throws Exception {
     String cluster = System.getProperty("CLUSTER");
     if (cluster == null) {

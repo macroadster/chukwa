@@ -41,9 +41,7 @@ public class MetricsAggregation {
    * @param args is list of command line parameters
    * @throws SQLException if SQL query fails
    */
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
-      "SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE", 
-      justification = "Dynamic based upon tables in the database")
+  @SuppressWarnings("SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE")
   public static void main(String[] args) throws SQLException {
     mdlConfig = new DatabaseConfig();
 

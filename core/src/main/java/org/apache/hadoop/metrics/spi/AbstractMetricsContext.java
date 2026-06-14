@@ -33,12 +33,6 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
-import org.apache.hadoop.metrics.ContextFactory;
-import org.apache.hadoop.metrics.MetricsContext;
-import org.apache.hadoop.metrics.MetricsException;
-import org.apache.hadoop.metrics.MetricsRecord;
-import org.apache.hadoop.metrics.Updater;
-
 /**
  * The main class of the Service Provider Interface.  This class should be
  * extended in order to integrate the Metrics API with a specific metrics
@@ -49,9 +43,194 @@ import org.apache.hadoop.metrics.Updater;
  * override the abstract <code>emitRecord</code> method in order to transmit
  * the data.
  */
-public abstract class AbstractMetricsContext implements MetricsContext {
+public abstract class AbstractMetricsContext {
+
+  public static final int DEFAULT_PERIOD = 5;
+
+  public static class ContextFactory {
+    private final Map<String, Object> attributes = new HashMap<String, Object>();
+
+    public Object getAttribute(String name) {
+      return attributes.get(name);
+    }
+
+    public void setAttribute(String name, Object value) {
+      attributes.put(name, value);
+    }
+
+    public Collection<String> getAttributeNames() {
+      return attributes.keySet();
+    }
+  }
+
+  public static class OutputRecord {
+    private final TagMap tags;
+    private final MetricMap metrics;
+
+    OutputRecord(TagMap tags, MetricMap metrics) {
+      this.tags = tags;
+      this.metrics = metrics;
+    }
+
+    public Set<String> getTagNames() {
+      return tags.keySet();
+    }
+
+    public Object getTag(String name) {
+      return tags.get(name);
+    }
+
+    public Set<String> getMetricNames() {
+      return metrics.keySet();
+    }
+
+    public Number getMetric(String name) {
+      return metrics.get(name);
+    }
+  }
+
+  public interface Updater {
+    void doUpdates(AbstractMetricsContext context);
+  }
+
+  public static class MetricsException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
+
+    public MetricsException(String message) {
+      super(message);
+    }
+
+    public MetricsException(String message, Throwable cause) {
+      super(message, cause);
+    }
+  }
+
+  public static class MetricValue {
+    private final Number number;
+    private final boolean absolute;
+
+    public MetricValue(Number number, boolean absolute) {
+      this.number = number;
+      this.absolute = absolute;
+    }
+
+    public Number getNumber() {
+      return number;
+    }
+
+    public boolean isAbsolute() {
+      return absolute;
+    }
+  }
+
+  public interface MetricsRecord {
+    String getRecordName();
+    void setTag(String name, Object value);
+    void setMetric(String name, int value);
+    void setMetric(String name, long value);
+    void setMetric(String name, float value);
+    void setMetric(String name, short value);
+    void setMetric(String name, byte value);
+    void incrMetric(String name, int value);
+    void incrMetric(String name, long value);
+    void incrMetric(String name, float value);
+    void incrMetric(String name, short value);
+    void incrMetric(String name, byte value);
+    void update();
+    void remove();
+  }
+
+  static class MetricsRecordImpl implements MetricsRecord {
+    private final String recordName;
+    private final AbstractMetricsContext context;
+    private TagMap tagTable = new TagMap();
+    private Map<String, MetricValue> metricTable = new HashMap<String, MetricValue>();
+
+    MetricsRecordImpl(String recordName, AbstractMetricsContext context) {
+      this.recordName = recordName;
+      this.context = context;
+    }
+
+    @Override
+    public String getRecordName() {
+      return recordName;
+    }
+
+    @Override
+    public void setTag(String name, Object value) {
+      tagTable.put(name, value);
+    }
+
+    @Override
+    public void setMetric(String name, int value) {
+      metricTable.put(name, new MetricValue(Integer.valueOf(value), true));
+    }
+
+    @Override
+    public void setMetric(String name, long value) {
+      metricTable.put(name, new MetricValue(Long.valueOf(value), true));
+    }
+
+    @Override
+    public void setMetric(String name, float value) {
+      metricTable.put(name, new MetricValue(Float.valueOf(value), true));
+    }
+
+    @Override
+    public void setMetric(String name, short value) {
+      metricTable.put(name, new MetricValue(Short.valueOf(value), true));
+    }
+
+    @Override
+    public void setMetric(String name, byte value) {
+      metricTable.put(name, new MetricValue(Byte.valueOf(value), true));
+    }
+
+    @Override
+    public void incrMetric(String name, int value) {
+      metricTable.put(name, new MetricValue(Integer.valueOf(value), false));
+    }
+
+    @Override
+    public void incrMetric(String name, long value) {
+      metricTable.put(name, new MetricValue(Long.valueOf(value), false));
+    }
+
+    @Override
+    public void incrMetric(String name, float value) {
+      metricTable.put(name, new MetricValue(Float.valueOf(value), false));
+    }
+
+    @Override
+    public void incrMetric(String name, short value) {
+      metricTable.put(name, new MetricValue(Short.valueOf(value), false));
+    }
+
+    @Override
+    public void incrMetric(String name, byte value) {
+      metricTable.put(name, new MetricValue(Byte.valueOf(value), false));
+    }
+
+    @Override
+    public void update() {
+      context.update(this);
+    }
+
+    @Override
+    public void remove() {
+      context.remove(this);
+    }
+
+    TagMap getTagTable() {
+      return tagTable;
+    }
+
+    Map<String, MetricValue> getMetricTable() {
+      return metricTable;
+    }
+  }
     
-  private int period = MetricsContext.DEFAULT_PERIOD;
+  private int period = DEFAULT_PERIOD;
   private Timer timer = null;
   private boolean computeRate = true;    
   private Set<Updater> updaters = new HashSet<Updater>(1);
@@ -77,7 +256,6 @@ public abstract class AbstractMetricsContext implements MetricsContext {
       for (Map.Entry<String,Object> entry : other.entrySet()) {
         Object value = get(entry.getKey());
         if (value == null || !value.equals(entry.getValue())) {
-          // either key does not exist here, or the value is different
           return false;
         }
       }
@@ -379,7 +557,7 @@ public abstract class AbstractMetricsContext implements MetricsContext {
       return Integer.valueOf(a.intValue() + b.intValue());
     }
     else if (a instanceof Float) {
-      return new Float(a.floatValue() + b.floatValue());
+      return Float.valueOf(a.floatValue() + b.floatValue());
     }
     else if (a instanceof Short) {
       return Short.valueOf((short)(a.shortValue() + b.shortValue()));

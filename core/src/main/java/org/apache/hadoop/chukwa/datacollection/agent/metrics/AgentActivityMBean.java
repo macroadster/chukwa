@@ -18,26 +18,8 @@
 
 package org.apache.hadoop.chukwa.datacollection.agent.metrics;
 
-import javax.management.ObjectName;
-
-import org.apache.hadoop.metrics.util.MBeanUtil;
-import org.apache.hadoop.metrics.util.MetricsDynamicMBeanBase;
-import org.apache.hadoop.metrics.util.MetricsRegistry;
-
-public class AgentActivityMBean extends MetricsDynamicMBeanBase {
-  final private ObjectName mbeanName;
-
-  public AgentActivityMBean(final MetricsRegistry mr, final String serviceName) {
-    super(mr, "Agent layer statistics");
-    mbeanName = MBeanUtil.registerMBean(serviceName,
-          "AgentActivity", this);
-  }
-
-
-  public void shutdown() {
-    if (mbeanName != null)
-      MBeanUtil.unregisterMBean(mbeanName);
-  }
-
-
+public interface AgentActivityMBean {
+  int getAdaptorCount();
+  int getAddedAdaptor();
+  int getRemovedAdaptor();
 }

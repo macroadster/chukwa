@@ -53,8 +53,8 @@ public class VelocityResolver implements InjectableProvider<Context, Type> {
           if (ve == null) {
             LOG.info("Ready to start velocity");
             ve = new VelocityEngine();
-            ve.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
-                    "org.apache.velocity.runtime.log.Log4JLogChute");
+            ve.setProperty(RuntimeConstants.RUNTIME_LOG_INSTANCE,
+                    LOG);
             ve.setProperty("runtime.log.logsystem.log4j.logger",
                 LOGGER_NAME);
             ve.setProperty(RuntimeConstants.RESOURCE_LOADER,

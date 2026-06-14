@@ -34,7 +34,7 @@ import org.apache.hadoop.chukwa.extraction.engine.ChukwaRecordKey;
 import org.apache.hadoop.chukwa.util.ExceptionUtil;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
-import org.apache.hadoop.record.Buffer;
+import java.nio.ByteBuffer;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -58,7 +58,7 @@ public class HBaseMasterProcessor extends AbstractProcessor {
         .getTimeInMillis();
     ChukwaRecord record = new ChukwaRecord();
 
-    Map<String, Buffer> metricsMap = new HashMap<String, Buffer>();
+    Map<String, ByteBuffer> metricsMap = new HashMap<String, ByteBuffer>();
 
     try {
       JSONObject obj = (JSONObject) JSONValue.parse(recordEntry);
@@ -91,11 +91,11 @@ public class HBaseMasterProcessor extends AbstractProcessor {
           valueString = Long.toString(newValue);
         }
 
-        Buffer b = new Buffer(valueString.getBytes(Charset.forName("UTF-8")));
+        ByteBuffer b = ByteBuffer.wrap(valueString.getBytes(Charset.forName("UTF-8")));
         metricsMap.put(key, b);
       }
 
-      TreeMap<String, Buffer> t = new TreeMap<String, Buffer>(metricsMap);
+      TreeMap<String, ByteBuffer> t = new TreeMap<String, ByteBuffer>(metricsMap);
       record.setMapFields(t);
       buildGenericRecord(record, null, timeStamp, "master");
       output.collect(key, record);

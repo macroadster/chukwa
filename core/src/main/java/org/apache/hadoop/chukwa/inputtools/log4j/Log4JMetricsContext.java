@@ -25,16 +25,14 @@ package org.apache.hadoop.chukwa.inputtools.log4j;
  * Copy chukwa-hadoop-*-client.jar and json.jar to HADOOP_HOME/lib
  * 
  */
-import org.apache.hadoop.metrics.ContextFactory;
-import org.apache.hadoop.metrics.MetricsException;
 import org.apache.hadoop.metrics.spi.AbstractMetricsContext;
-import org.apache.hadoop.metrics.spi.OutputRecord;
+import org.apache.hadoop.metrics.spi.AbstractMetricsContext.ContextFactory;
+import org.apache.hadoop.metrics.spi.AbstractMetricsContext.MetricsException;
+import org.apache.hadoop.metrics.spi.AbstractMetricsContext.OutputRecord;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.json.simple.JSONObject;
-import java.util.TreeMap;
-import java.util.Map;
-import java.util.Collection;
+
 import java.io.IOException;
 import org.apache.hadoop.chukwa.util.ExceptionUtil;
 
@@ -121,21 +119,5 @@ public class Log4JMetricsContext extends AbstractMetricsContext {
     }
   }
 
-  @Override
-  public synchronized Map<String, Collection<OutputRecord>> getAllRecords() {
-    Map<String, Collection<OutputRecord>> out = new TreeMap<String, Collection<OutputRecord>>();
-/*    for (String recordName : bufferedData.keySet()) {
-      RecordMap recordMap = bufferedData.get(recordName);
-      synchronized (recordMap) {
-        List<OutputRecord> records = new ArrayList<OutputRecord>();
-        Set<Entry<TagMap, MetricMap>> entrySet = recordMap.entrySet();
-        for (Entry<TagMap, MetricMap> entry : entrySet) {
-          OutputRecord outRec = new OutputRecord(entry.getKey(), entry.getValue());
-          records.add(outRec);
-        }
-        out.put(recordName, records);
-      }
-    }*/
-    return out;
-  }
+
 }

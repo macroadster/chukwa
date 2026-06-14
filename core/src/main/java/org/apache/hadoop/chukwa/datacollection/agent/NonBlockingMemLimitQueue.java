@@ -65,18 +65,18 @@ public class NonBlockingMemLimitQueue implements ChunkQueue {
           // this error should probably be fatal; there's no way to
           // recover.
         } else {
-          metrics.fullQueue.set(1);
+          metrics.setFullQueue(1);
           log.warn("Discarding chunk due to NonBlockingMemLimitQueue full [" + dataSize
               + "]");
           return;
         }
       }
-      metrics.fullQueue.set(0);
+      metrics.setFullQueue(0);
       dataSize += chunk.getData().length;
       queue.add(chunk);
-      metrics.addedChunk.inc();
-      metrics.queueSize.set(queue.size());
-      metrics.dataSize.set(dataSize);
+      metrics.incAddedChunk();
+      metrics.setQueueSize(queue.size());
+      metrics.setDataSize(dataSize);
       this.notifyAll();
     }
   }
@@ -96,14 +96,14 @@ public class NonBlockingMemLimitQueue implements ChunkQueue {
       int size = 0;
       while (!queue.isEmpty() && (size < maxSize)) {
         Chunk e = this.queue.remove();
-        metrics.removedChunk.inc();
+        metrics.incRemovedChunk();
         int chunkSize = e.getData().length;
         size += chunkSize;
         dataSize -= chunkSize;
-        metrics.dataSize.set(dataSize);
+        metrics.setDataSize(dataSize);
         events.add(e);
       }
-      metrics.queueSize.set(queue.size());
+      metrics.setQueueSize(queue.size());
       this.notifyAll();
     }
 

@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.hadoop.record.Buffer;
+import java.nio.ByteBuffer;
 
 public class ChukwaRecord extends ChukwaRecordJT implements Record {
   public ChukwaRecord() {
@@ -34,10 +34,10 @@ public class ChukwaRecord extends ChukwaRecordJT implements Record {
   public void add(String key, String value) {
     synchronized (this) {
       if (this.mapFields == null) {
-        this.mapFields = new TreeMap<String, Buffer>();
+        this.mapFields = new TreeMap<String, ByteBuffer>();
       }
     }
-    this.mapFields.put(key, new Buffer(value.getBytes(Charset.forName("UTF-8"))));
+    this.mapFields.put(key, ByteBuffer.wrap(value.getBytes(Charset.forName("UTF-8"))));
   }
 
   public String[] getFields() {
@@ -46,7 +46,7 @@ public class ChukwaRecord extends ChukwaRecordJT implements Record {
 
   public String getValue(String field) {
     if (this.mapFields.containsKey(field)) {
-      return new String(this.mapFields.get(field).get(), Charset.forName("UTF-8"));
+      return new String(this.mapFields.get(field).array(), Charset.forName("UTF-8"));
     } else {
       return null;
     }
@@ -64,10 +64,10 @@ public class ChukwaRecord extends ChukwaRecordJT implements Record {
 
   @Override
   public String toString() {
-    Set<Map.Entry<String, Buffer>> f = this.mapFields.entrySet();
-    Iterator<Map.Entry<String, Buffer>> it = f.iterator();
+    Set<Map.Entry<String, ByteBuffer>> f = this.mapFields.entrySet();
+    Iterator<Map.Entry<String, ByteBuffer>> it = f.iterator();
 
-    Map.Entry<String, Buffer> entry = null;
+    Map.Entry<String, ByteBuffer> entry = null;
     StringBuilder sb = new StringBuilder();
     sb.append("<event  ");
     StringBuilder body = new StringBuilder();
@@ -79,7 +79,7 @@ public class ChukwaRecord extends ChukwaRecordJT implements Record {
     while (it.hasNext()) {
       entry = it.next();
       key = entry.getKey().intern();
-      val = new String(entry.getValue().get(), Charset.forName("UTF-8"));
+      val = new String(entry.getValue().array(), Charset.forName("UTF-8"));
       if (key.intern() == Record.bodyField.intern()) {
         hasBody = true;
         bodyVal = val;
